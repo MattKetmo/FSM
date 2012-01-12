@@ -1,5 +1,5 @@
 {
-    "name": "FSM",
+    "name": "Jpauli/FSM",
     "require": {
         "php": ">=5.3.0"
     },
