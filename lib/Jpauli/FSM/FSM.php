@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright (c) 2006-2008, 2011 KUBO Atsuhiro <kubo@iteman.jp>,
  * Copyright 2012 PAULI Julien <jpauli@php.net>
@@ -25,6 +26,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
+
 namespace Jpauli\FSM;
 
 use Jpauli\FSM\State\InitialState;
@@ -71,7 +73,7 @@ class FSM implements \Countable, \IteratorAggregate, \ArrayAccess
 
     /**
      * Has the FSM been initialized ?
-     * 
+     *
      * @var bool
      */
     protected $isInitialized = false;
@@ -90,14 +92,14 @@ class FSM implements \Countable, \IteratorAggregate, \ArrayAccess
      * The payload. Can be anything. That's
      * the base FSM heart, the payload is the
      * thing that is shared and altered through states
-     * 
+     *
      * @var mixed
      */
     protected $payload;
 
     /**
      * Initialize function
-     * 
+     *
      * @var callable
      */
     protected $initializeFunction;
@@ -107,25 +109,26 @@ class FSM implements \Countable, \IteratorAggregate, \ArrayAccess
      */
     public function __construct($name = null)
     {
-        $this->name   = $name;
+        $this->name = $name;
     }
 
     /**
      * Starts the Finite State Machine.
-     * 
+     *
      * @return \Jpauli\FSM\FSM
      */
     public function start()
     {
         $this->initialize();
         $this->processEvent(Event::EVENT_START);
+
         return $this;
     }
 
     /**
      * Weither or not a state exists inside
      * the FSM
-     * 
+     *
      * @param string $stateName
      * @return bool
      */
@@ -190,7 +193,7 @@ class FSM implements \Countable, \IteratorAggregate, \ArrayAccess
 
     /**
      * Retrieves the number of final states
-     * 
+     *
      * @return int
      */
     public function getNumberOfFinalStates()
@@ -201,6 +204,7 @@ class FSM implements \Countable, \IteratorAggregate, \ArrayAccess
                 $count++;
             }
         }
+
         return $count;
     }
 
@@ -216,12 +220,13 @@ class FSM implements \Countable, \IteratorAggregate, \ArrayAccess
         if ($this->hasState($stateName)) {
             return $this->states[$stateName];
         }
+
         throw new StateException("$stateName not found");
     }
 
     /**
      * Removes a state from the FSM
-     * 
+     *
      * @param string $stateName
      * @return \Jpauli\FSM\FSM
      * @throws \Jpauli\FSM\Exception\StateException
@@ -231,7 +236,9 @@ class FSM implements \Countable, \IteratorAggregate, \ArrayAccess
         if (!$this->hasState($stateName)) {
             throw new StateException("State $stateName is missing, can't delete it");
         }
+
         unset($this->states[$stateName]);
+
         return $this;
     }
 
@@ -252,16 +259,19 @@ class FSM implements \Countable, \IteratorAggregate, \ArrayAccess
         } else {
             throw new StateException("State must be a state name or an IState");
         }
+
         if ($this->hasState($stateName)) {
             throw new StateException("$stateName already exists into FSM");
         }
+
         $this->states[$stateName] = $state;
+
         return $this;
     }
 
     /**
      * Adds several states in one call
-     * 
+     *
      * @param array $states
      * @return \Jpauli\FSM\FSM
      */
@@ -270,18 +280,20 @@ class FSM implements \Countable, \IteratorAggregate, \ArrayAccess
         foreach ($states as $state) {
             $this->addState($state);
         }
+
         return $this;
     }
 
     /**
      * Adds a final states
-     * 
+     *
      * @param string $finalStateName
      * @return \Jpauli\FSM\FSM
      */
     public function addFinalState($finalStateName)
     {
         $this->addState(new FinalState($finalStateName));
+
         return $this;
     }
 
@@ -299,7 +311,7 @@ class FSM implements \Countable, \IteratorAggregate, \ArrayAccess
      * Adds a transition from a starting state to
      * a landing state, binding them with an event
      * States and Events are created if needed
-     * 
+     *
      * @param string $stateName
      * @param string $eventName
      * @param string $nextStateName
@@ -315,6 +327,7 @@ class FSM implements \Countable, \IteratorAggregate, \ArrayAccess
             $state = new State($stateName);
             $this->addState($state);
         }
+
         try {
             $event = $state->getEvent($eventName);
             if ($state->hasEvent($eventName)) {
@@ -324,14 +337,17 @@ class FSM implements \Countable, \IteratorAggregate, \ArrayAccess
             $event = new Event($eventName);
             $state->addEvent($event);
         }
+
         try {
             $nextState = $this->getState($nextStateName);
         } catch (StateException $e) {
             $nextState = new State($nextStateName);
             $this->addState($nextState);
         }
+
         $event->setNextState($nextStateName);
         $event->setAction($action);
+
         return $this;
     }
 
@@ -354,6 +370,7 @@ class FSM implements \Countable, \IteratorAggregate, \ArrayAccess
     public function setPayload(&$payload)
     {
         $this->payload = &$payload;
+
         return $this;
     }
 
@@ -376,6 +393,7 @@ class FSM implements \Countable, \IteratorAggregate, \ArrayAccess
     public function clearPayload()
     {
         $this->payload = null;
+
         return $this;
     }
 
@@ -389,12 +407,13 @@ class FSM implements \Countable, \IteratorAggregate, \ArrayAccess
     {
         $this->previousState = $this->currentState;
         $this->currentState  = $this->getState($stateName);
+
         return $this;
     }
 
     /**
      * Initializes the FSM.
-     * 
+     *
      * @throws \Jpauli\FSM\Exception\LogicalException
      * @return \Jpauli\FSM\FSM
      */
@@ -403,21 +422,26 @@ class FSM implements \Countable, \IteratorAggregate, \ArrayAccess
         if ($this->isInitialized) {
             return $this;
         }
+
         if (!$this->initializeFunction) {
             $this->initializeFunction = $this->getDefaultInitializeFunction();
         }
+
         $function = $this->initializeFunction;
         call_user_func($function, $this);
+
         if ($this->currentState && $this->currentState->getType() != IState::STATE_INITIAL) {
             throw new LogicalException("First state is expected to be of type " . IState::STATE_INITIAL);
         }
+
         $this->isInitialized = true;
+
         return $this;
     }
 
     /**
      * Sets the FSM init callback
-     * 
+     *
      * @param callable $callable
      * @throws \Jpauli\FSM\Exception\NotCallableException
      * @return \Jpauli\FSM\FSM
@@ -427,19 +451,20 @@ class FSM implements \Countable, \IteratorAggregate, \ArrayAccess
         if (!is_callable($callable)) {
             throw new NotCallableException('The initialize function is not callable.');
         }
+
         $this->initializeFunction = $callable;
+
         return $this;
     }
 
     /**
      * Retrieves the default FSM init function
-     * 
+     *
      * @return \Closure
      */
     private function getDefaultInitializeFunction()
     {
-        return function (FSM $fsm)
-        {
+        return function (FSM $fsm) {
             $initialState = new InitialState();
             $fsm->addState($initialState);
             $fsm->setCurrentState($initialState);
@@ -451,7 +476,7 @@ class FSM implements \Countable, \IteratorAggregate, \ArrayAccess
 
     /**
      * Sets the current FSM state
-     * 
+     *
      * @param string $state
      * @throws \Jpauli\FSM\Exception\StateException
      * @return \Jpauli\FSM\FSM
@@ -464,12 +489,13 @@ class FSM implements \Countable, \IteratorAggregate, \ArrayAccess
             throw new StateException("A valid state is expected");
         }
         $this->currentState = $state;
+
         return $this;
     }
 
     /**
      * Resets the FSM as if it was new
-     * 
+     *
      * @return \Jpauli\FSM\FSM
      */
     public function reset()
@@ -480,6 +506,7 @@ class FSM implements \Countable, \IteratorAggregate, \ArrayAccess
                             = $this->initializeFunction
                             = null;
         $this->isInitialized = false;
+
         return $this;
     }
 
@@ -506,10 +533,11 @@ class FSM implements \Countable, \IteratorAggregate, \ArrayAccess
         $nextStateName = $event->getNextState();
         $this->transition($nextStateName);
         $event->invokeAction($this);
+
         return $this;
     }
 
-	/**
+    /**
      * @see \ArrayAccess::offsetExists()
      */
     public function offsetExists($offset)
@@ -517,7 +545,7 @@ class FSM implements \Countable, \IteratorAggregate, \ArrayAccess
         return $this->hasState($offset);
     }
 
-	/**
+    /**
      * @see \ArrayAccess::offsetGet()
      */
     public function offsetGet($offset)
@@ -525,7 +553,7 @@ class FSM implements \Countable, \IteratorAggregate, \ArrayAccess
         return $this->getState($offset);
     }
 
-	/**
+    /**
      * @see \ArrayAccess::offsetSet()
      */
     public function offsetSet($offset, $value)
@@ -533,11 +561,11 @@ class FSM implements \Countable, \IteratorAggregate, \ArrayAccess
         $this->addState($value);
     }
 
-	/**
+    /**
      * @see \ArrayAccess::offsetUnset()
      */
     public function offsetUnset($offset)
     {
-        $this->removeState($offset);        
+        $this->removeState($offset);
     }
 }

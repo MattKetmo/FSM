@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright (c) 2006-2008, 2011 KUBO Atsuhiro <kubo@iteman.jp>,
  * Copyright 2012 PAULI Julien <jpauli@php.net>
@@ -25,6 +26,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
+
 namespace Jpauli\FSM\Exception;
 
 /**
@@ -33,5 +35,5 @@ namespace Jpauli\FSM\Exception;
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  */
 interface FSMException
-{    
+{
 }

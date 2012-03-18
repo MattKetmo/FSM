@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright (c) 2006-2008, 2011 KUBO Atsuhiro <kubo@iteman.jp>,
  * Copyright 2012 PAULI Julien <jpauli@php.net>
@@ -25,6 +26,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
+
 namespace Jpauli\FSM\State;
 
 use Jpauli\FSM\Exception\EventException;
@@ -41,14 +43,14 @@ abstract class AbstractState implements IState, \Countable, \IteratorAggregate
 {
     /**
      * Name of the state
-     * 
+     *
      * @var string
      */
     protected $name;
 
     /**
      * Array of Events
-     * 
+     *
      * @var array
      */
     protected $events = array();
@@ -101,6 +103,7 @@ abstract class AbstractState implements IState, \Countable, \IteratorAggregate
     public function addEvent(Event $event)
     {
         $this->events[$event->getName()] = $event;
+
         return $this;
     }
 
@@ -116,7 +119,7 @@ abstract class AbstractState implements IState, \Countable, \IteratorAggregate
 
     /**
      * Removes an event
-     * 
+     *
      * @param string $eventName
      * @return \Jpauli\FSM\State\IState
      * @throws \Jpauli\FSM\Exception\EventException
@@ -126,7 +129,9 @@ abstract class AbstractState implements IState, \Countable, \IteratorAggregate
         if (!$this->hasEvent($eventName)) {
             throw new EventException("Event $eventName does not exist in $this");
         }
+
         unset($this->events[$eventName]);
+
         return $this;
     }
 

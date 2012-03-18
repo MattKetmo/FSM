@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright (c) 2006-2008, 2011 KUBO Atsuhiro <kubo@iteman.jp>,
  * Copyright 2012 PAULI Julien <jpauli@php.net>
@@ -25,6 +26,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
+
 namespace Jpauli\FSM\Event;
 
 use Jpauli\FSM\Exception\NotCallableException;
@@ -47,7 +49,7 @@ class Event
 
     /**
      * Event name
-     * 
+     *
      * @var string
      */
     protected $name;
@@ -55,14 +57,14 @@ class Event
     /**
      * The next state to go when this event
      * has finished dispatch
-     * 
+     *
      * @var string
      */
     protected $nextState;
 
     /**
      * Callback action. May be null
-     * 
+     *
      * @var callable
      */
     protected $action;
@@ -97,7 +99,9 @@ class Event
         if ($action && !is_callable($action)) {
             throw new NotCallableException('The action is not callable.');
         }
+
         $this->action = $action;
+
         return $this;
     }
 
@@ -142,7 +146,9 @@ class Event
         if (is_null($this->action)) {
             return;
         }
+
         $payload = &$fsm->getPayload();
+
         return call_user_func_array($this->action, array($fsm, $this, &$payload));
     }
 }

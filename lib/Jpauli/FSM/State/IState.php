@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright (c) 2006-2008, 2011 KUBO Atsuhiro <kubo@iteman.jp>,
  * Copyright 2012 PAULI Julien <jpauli@php.net>
