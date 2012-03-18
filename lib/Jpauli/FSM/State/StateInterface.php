@@ -38,7 +38,7 @@ use Jpauli\FSM\Event\Event;
  * @copyright  2012 PAULI Julien <jpauli@php.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  */
-interface IState
+interface StateInterface
 {
     /* Constants for pseudo states */
     /**
@@ -68,7 +68,7 @@ interface IState
      * Adds the event with the given name.
      *
      * @param \Jpauli\FSM\Event\Event $event
-     * @return \Jpauli\FSM\State\IState 
+     * @return \Jpauli\FSM\State\StateInterface
      */
     public function addEvent(Event $event);
 
@@ -90,14 +90,14 @@ interface IState
     /**
      * Return the type of the State
      * Enum chosen via self:: constants
-     * 
+     *
      * @return string
      */
     public function getType();
 
     /**
      * Basically should return the State name
-     * 
+     *
      * @return string
      */
     public function __toString();

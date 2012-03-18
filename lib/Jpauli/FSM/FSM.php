@@ -35,7 +35,7 @@ use Jpauli\FSM\Exception\EventException;
 use Jpauli\FSM\Exception\LogicalException;
 use Jpauli\FSM\State\FinalState;
 use Jpauli\FSM\Exception\StateException;
-use Jpauli\FSM\State\IState;
+use Jpauli\FSM\State\StateInterface;
 use Jpauli\FSM\State\State;
 use Jpauli\FSM\Event\Event;
 
@@ -62,12 +62,12 @@ use Jpauli\FSM\Event\Event;
 class FSM implements \Countable, \IteratorAggregate, \ArrayAccess
 {
     /**
-     * @var \Jpauli\FSM\State\IState
+     * @var \Jpauli\FSM\State\StateInterface
      */
     protected $currentState;
 
     /**
-     * @var \Jpauli\FSM\IState
+     * @var \Jpauli\FSM\StateInterface
      */
     protected $previousState;
 
@@ -148,7 +148,7 @@ class FSM implements \Countable, \IteratorAggregate, \ArrayAccess
     /**
      * Gets the current state.
      *
-     * @return \Jpauli\FSM\State\IState
+     * @return \Jpauli\FSM\State\StateInterface
      */
     public function getCurrentState()
     {
@@ -174,7 +174,7 @@ class FSM implements \Countable, \IteratorAggregate, \ArrayAccess
     /**
      * Gets the previous state.
      *
-     * @return \Jpauli\FSM\IState
+     * @return \Jpauli\FSM\StateInterface
      */
     public function getPreviousState()
     {
@@ -200,7 +200,7 @@ class FSM implements \Countable, \IteratorAggregate, \ArrayAccess
     {
         $count = 0;
         foreach ($this->states as $state) {
-            if ($state->getType() == IState::STATE_FINAL) {
+            if ($state->getType() == StateInterface::STATE_FINAL) {
                 $count++;
             }
         }
@@ -212,7 +212,7 @@ class FSM implements \Countable, \IteratorAggregate, \ArrayAccess
      * Finds and returns the state with the given name.
      *
      * @param string $stateName
-     * @return \Jpauli\FSM\State\IState
+     * @return \Jpauli\FSM\State\StateInterface
      * @throws \Jpauli\FSM\Exception\UnknownStateException
      */
     public function getState($stateName)
@@ -245,7 +245,7 @@ class FSM implements \Countable, \IteratorAggregate, \ArrayAccess
     /**
      * Adds the state with the given name.
      *
-     * @param string|\Jpauli\FSM\State\IState $state
+     * @param string|\Jpauli\FSM\State\StateInterface $state
      * @return \Jpauli\FSM\FSM;
      * @throws \Jpauli\FSM\Exception\StateException
      */
@@ -254,10 +254,10 @@ class FSM implements \Countable, \IteratorAggregate, \ArrayAccess
         if (is_string($state)) {
             $stateName = $state;
             $state = new State($stateName);
-        } elseif ($state instanceof IState) {
+        } elseif ($state instanceof StateInterface) {
             $stateName = $state->getName();
         } else {
-            throw new StateException("State must be a state name or an IState");
+            throw new StateException("State must be a state name or an StateInterface");
         }
 
         if ($this->hasState($stateName)) {
@@ -304,7 +304,7 @@ class FSM implements \Countable, \IteratorAggregate, \ArrayAccess
      */
     public function isFinished()
     {
-        return $this->isInitialized && $this->currentState->getType() == IState::STATE_FINAL;
+        return $this->isInitialized && $this->currentState->getType() == StateInterface::STATE_FINAL;
     }
 
     /**
@@ -430,8 +430,8 @@ class FSM implements \Countable, \IteratorAggregate, \ArrayAccess
         $function = $this->initializeFunction;
         call_user_func($function, $this);
 
-        if ($this->currentState && $this->currentState->getType() != IState::STATE_INITIAL) {
-            throw new LogicalException("First state is expected to be of type " . IState::STATE_INITIAL);
+        if ($this->currentState && $this->currentState->getType() != StateInterface::STATE_INITIAL) {
+            throw new LogicalException("First state is expected to be of type " . StateInterface::STATE_INITIAL);
         }
 
         $this->isInitialized = true;
@@ -485,7 +485,7 @@ class FSM implements \Countable, \IteratorAggregate, \ArrayAccess
     {
         if (is_string($state)) {
             $state = $this->getState($state);
-        } elseif (!$state instanceof IState) {
+        } elseif (!$state instanceof StateInterface) {
             throw new StateException("A valid state is expected");
         }
         $this->currentState = $state;

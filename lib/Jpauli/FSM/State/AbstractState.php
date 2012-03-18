@@ -39,7 +39,7 @@ use Jpauli\FSM\Event\Event;
  * @copyright  2012 PAULI Julien <jpauli@php.net>
  * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License (revised)
  */
-abstract class AbstractState implements IState, \Countable, \IteratorAggregate
+abstract class AbstractState implements StateInterface, \Countable, \IteratorAggregate
 {
     /**
      * Name of the state
@@ -98,7 +98,7 @@ abstract class AbstractState implements IState, \Countable, \IteratorAggregate
      * Adds an Event object to this state
      *
      * @param \Jpauli\FSM\Event\Event $event
-     * @return \Jpauli\FSM\State\IState
+     * @return \Jpauli\FSM\State\StateInterface
      */
     public function addEvent(Event $event)
     {
@@ -121,7 +121,7 @@ abstract class AbstractState implements IState, \Countable, \IteratorAggregate
      * Removes an event
      *
      * @param string $eventName
-     * @return \Jpauli\FSM\State\IState
+     * @return \Jpauli\FSM\State\StateInterface
      * @throws \Jpauli\FSM\Exception\EventException
      */
     public function removeEvent($eventName)
@@ -147,7 +147,7 @@ abstract class AbstractState implements IState, \Countable, \IteratorAggregate
     }
 
     /**
-     * @see Jpauli\FSM\State\IState::__toString()
+     * @see Jpauli\FSM\State\StateInterface::__toString()
      * @return string
      */
     public function __toString()

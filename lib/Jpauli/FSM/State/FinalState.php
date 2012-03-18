@@ -66,11 +66,11 @@ class FinalState extends AbstractState
     }
 
     /**
-     * @see Jpauli\FSM\State\IState::getType()
+     * @see Jpauli\FSM\State\StateInterface::getType()
      */
     final public function getType()
     {
-        return IState::STATE_FINAL;
+        return StateInterface::STATE_FINAL;
     }
 
     /**

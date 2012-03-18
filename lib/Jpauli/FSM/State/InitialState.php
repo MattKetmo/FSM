@@ -55,10 +55,10 @@ class InitialState extends AbstractState
     }
 
     /**
-     * @see Jpauli\FSM\State\IState::getType()
+     * @see Jpauli\FSM\State\StateInterface::getType()
      */
     final public function getType()
     {
-        return IState::STATE_INITIAL;
+        return StateInterface::STATE_INITIAL;
     }
 }
